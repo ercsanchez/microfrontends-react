@@ -21,7 +21,7 @@ defaults:
 
 jobs: # runs in parallel
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     # combines build and deploy but can be split into separate build and deploy jobs
     steps:
