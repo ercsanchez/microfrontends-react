@@ -9,6 +9,7 @@ const prodConfig = {
   mode: "production",
   output: {
     filename: "[name].[contenthash].js", // to resolve caching issues
+    publicPath: "/container/latest/", // Webpack plugins will (HtmlWebpackPlugin) reference files built by webpack using this path
   },
   plugins: [
     new ModuleFederationPlugin({
