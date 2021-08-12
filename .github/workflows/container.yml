@@ -8,6 +8,7 @@ on:
       - master # optional
       - 06-cicd-pipeline # add succeeding branches to .yml file
       - 07-aws-s3-and-cloudfront
+      - 08-mfe-aws-config
 
     # only run this workflow for the file changes in this dir
     paths:
