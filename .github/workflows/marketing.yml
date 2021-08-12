@@ -1,0 +1,46 @@
+name: deploy-marketing
+
+on:
+  push:
+    # changes to these branches are considered
+    branches:
+      - main
+      - master # optional
+      - 06-cicd-pipeline # add succeeding branches to .yml file
+      - 07-aws-s3-and-cloudfront
+      - 08-mfe-aws-config
+
+    # only run this workflow for the file changes in this dir
+    paths:
+      - "packages/marketing/**"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: packages/marketing # set root dir for execution to this dir
+
+jobs: # runs in parallel
+  build:
+    runs-on: ubuntu-18.04
+
+    # combines build and deploy but can be split into separate build and deploy jobs
+    steps:
+      # build
+      - uses: actions/checkout@v2 #checkout code from out repo
+      - run: npm install
+      - run: npm run build
+
+      # deployment to AWS S3
+      - uses: chrislennon/action-aws-cli@v1.1 # access AWS cli
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/marketing/latest # sync s3 bucket with dist dir
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # automated invalidation
+      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/marketing/latest/remoteEntry.js"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
