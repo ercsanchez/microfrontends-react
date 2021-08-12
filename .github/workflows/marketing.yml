@@ -1,4 +1,4 @@
-name: deploy-container
+name: deploy-marketing
 
 on:
   push:
@@ -12,14 +12,14 @@ on:
 
     # only run this workflow for the file changes in this dir
     paths:
-      - "packages/container/**"
+      - "packages/marketing/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: packages/container # set root dir for execution to this dir
+    working-directory: packages/marketing # set root dir for execution to this dir
 
 jobs: # runs in parallel
   build:
@@ -31,18 +31,16 @@ jobs: # runs in parallel
       - uses: actions/checkout@v2 #checkout code from out repo
       - run: npm install
       - run: npm run build
-        env:
-          PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }} # references process.env.PRODUCTION_DOMAIN of container's webpack.prod.js
 
       # deployment to AWS S3
       - uses: chrislennon/action-aws-cli@v1.1 # access AWS cli
-      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest # sync s3 bucket with dist dir
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/marketing/latest # sync s3 bucket with dist dir
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      # automated invalidation of index.html
-      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/container/latest/index.html"
+      # automated invalidation
+      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/marketing/latest/remoteEntry.js"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
