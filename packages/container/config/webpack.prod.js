@@ -16,7 +16,7 @@ const prodConfig = {
       name: "container",
       remotes: {
         // remoteEntry files must point to production domains
-        marketing: `marketing@${domain}/marketing/remoteEntry.js`, // we assume that the remoteEntry.js for each will be nested in a dir named for the app
+        marketing: `marketing@${domain}/marketing/latest/remoteEntry.js`, // we assume that the remoteEntry.js for each will be nested in a dir named for the app
       },
       shared: packageJson.dependencies,
     }),
