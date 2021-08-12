@@ -7,6 +7,7 @@ const prodConfig = {
   mode: "production",
   output: {
     filename: "[name].[contenthash].js", // to resolve caching issues
+    publicPath: "/marketing/latest/", // Webpack plugins will (HtmlWebpackPlugin) reference files built by webpack using this path so that remoteEntry.js references correct file path
   },
   plugins: [
     new ModuleFederationPlugin({

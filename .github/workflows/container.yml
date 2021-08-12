@@ -31,6 +31,8 @@ jobs: # runs in parallel
       - uses: actions/checkout@v2 #checkout code from out repo
       - run: npm install
       - run: npm run build
+        env:
+          PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }} # references process.env.PRODUCTION_DOMAIN of container's webpack.prod.js
 
       # deployment to AWS S3
       - uses: chrislennon/action-aws-cli@v1.1 # access AWS cli
