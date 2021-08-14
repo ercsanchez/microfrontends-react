@@ -18,8 +18,18 @@ const mount = (el, { onNavigate }) => {
   ReactDOM.render(<App history={history} />, el);
 
   return {
-    onParentNavigate() {
-      console.log("Container just navigated");
+    onParentNavigate({ pathname: nextPathname }) {
+      console.log(nextPathname);
+
+      // prevent infinite loop caused by updating of histories in marketing and container
+      const { pathname } = history.location;
+
+      // if same path, do not alter memory history
+
+      // if diff paths, update memory history
+      if (pathname !== nextPathname) {
+        history.push(nextPathname);
+      }
     },
   };
 };
