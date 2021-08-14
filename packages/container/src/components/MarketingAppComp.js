@@ -6,8 +6,8 @@ export default () => {
 
   useEffect(() => {
     mount(ref.current, {
-      onNavigate: () => {
-        console.log("container noticed navigation in marketing");
+      onNavigate: (location) => {
+        console.log(location); // location arg passed by history.listen
       },
     });
   });
