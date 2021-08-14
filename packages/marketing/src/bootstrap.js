@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { createMemoryHistory } from "history";
+import { createMemoryHistory, createBrowserHistory } from "history";
 
 import App from "./App";
 
 // Mount function to start up app
 
-const mount = (el, { onNavigate }) => {
-  const history = createMemoryHistory();
+const mount = (el, { onNavigate, defaultHistory }) => {
+  // use browser history if provided, otherwise use memory history
+  const history = defaultHistory || createMemoryHistory();
 
   // check if onNavigate was actually passed
   // only happens when container is run and marketing is not running in isolation
@@ -41,7 +42,8 @@ if (process.env.NODE_ENV === "development") {
   const devRoot = document.querySelector("#_marketing-dev-root");
 
   if (devRoot) {
-    mount(devRoot, {});
+    // provide browser history if in dev and running marketing in isolation
+    mount(devRoot, { defaultHistory: createBrowserHistory() });
   }
 }
 
