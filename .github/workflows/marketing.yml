@@ -11,6 +11,7 @@ on:
       - 08-mfe-aws-config
       - 09-css-mfe
       - 10-multi-tier-nav
+      - 11-performance
 
     # only run this workflow for the file changes in this dir
     paths:
