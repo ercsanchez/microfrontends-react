@@ -6,9 +6,13 @@ import App from "./App";
 
 // Mount function to start up app
 
-const mount = (el, { onNavigate, defaultHistory }) => {
+const mount = (el, { onNavigate, defaultHistory, initialPath }) => {
   // use browser history if provided, otherwise use memory history
-  const history = defaultHistory || createMemoryHistory();
+  const history =
+    defaultHistory ||
+    createMemoryHistory({
+      initialEntries: [initialPath],
+    });
 
   // check if onNavigate was actually passed
   // only happens when container is run and marketing is not running in isolation
